@@ -83,4 +83,20 @@ const loginAdmin = async (req, res) => {
     }
 }
 
-export {addDoctor , loginAdmin}
+// API for deleting doctor
+
+const deleteDoctor = async (req,res)=>{
+    try {
+        const {docId} = req.body
+        await doctorModel.findByIdAndDelete(docId)
+        res.status(200).json({ success:true , message:"Doc Deleted" });
+
+        
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({ success:false , message:error.message});
+    }
+
+}
+
+export {addDoctor , loginAdmin , deleteDoctor}
