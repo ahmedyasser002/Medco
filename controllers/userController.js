@@ -85,4 +85,19 @@ const getProfile = async (req, res) => {
     }
 }
 
+// API to Update User Profile
+const updateProfile = async (req,res) =>{
+    try {
+        const {userId , name , phone , address ,dob , gender} = req.body;
+        const imageFile = req.file
+        if (!name || !phone || !dob || !gender) {
+            res.status(400).json({success:false , message: error.message });
+        }
+        await userModel.findByIdAndUpdate(userId , {name , phone , address:JSON.parse(address)})
+    } catch (error) {
+        res.status(500).json({success:false , message: error.message });
+    }
+
+}
+
 export {registerUser , loginUser , getProfile}
