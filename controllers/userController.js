@@ -177,7 +177,7 @@ const getPatientList = async (req,res)=>{
  try {
        
 
-        const patients = await userModel.find({}).select(['-password', '-email']);
+        const patients = await userModel.find({}).select(['-password']);
         res.status(200).json({ success: true, data: patients });
 
     } catch (error) {
