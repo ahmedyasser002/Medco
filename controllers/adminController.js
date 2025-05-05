@@ -2,6 +2,7 @@ import validator from "validator"
 import bcrypt from 'bcrypt'
 import { v2 as cloudinary } from "cloudinary";
 import doctorModel from "../models/doctorModel.js"
+import userModel from "../models/userModel.js"
 import jwt from 'jsonwebtoken'
 
 
@@ -99,4 +100,17 @@ const deleteDoctor = async (req,res)=>{
 
 }
 
-export {addDoctor , loginAdmin , deleteDoctor}
+const deletePatient = async(req,res) =>{
+    try {
+        const {patientId} = req.body
+        await userModel.findByIdAndDelete(patientId)
+        res.status(200).json({ success:true , message:"Patient Deleted" });
+
+        
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({ success:false , message:error.message});
+    }
+}
+
+export {addDoctor , loginAdmin , deleteDoctor , deletePatient}

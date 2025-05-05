@@ -7,4 +7,5 @@ const adminRouter = express.Router()
 adminRouter.post('/add-doctor', authAdmin , upload.single('image'), addDoctor)
 adminRouter.post('/login', loginAdmin)
 adminRouter.delete('/delete-doctor' , authAdmin , deleteDoctor);
+adminRouter.delete('/delete-patient' , authAdmin , deletePatient);
 export default adminRouter
