@@ -22,7 +22,7 @@ const doctorList = async (req, res) => {
 
         const filter = speciality ? { speciality } : {};
 
-        const doctors = await doctorModel.find(filter).select(['-password', '-email']);
+        const doctors = await doctorModel.find(filter).select(['-password']);
         res.status(200).json({ success: true, data: doctors });
 
     } catch (error) {
