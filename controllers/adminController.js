@@ -20,7 +20,7 @@ const addDoctor = async (req,res) => {
         }
 
         // validating email format
-        if (validator.isEmail(email)) {
+        if (!validator.isEmail(email)) {
             return res.status(400).json({ success:false , message: "Please Enter Valid Email " });
         }
 
