@@ -25,7 +25,7 @@ app.use(cors());
 // API Endpoint
 app.use("/api/admin", adminRouter);
 app.use("/api/doctor", doctorRouter);
-app.use("/api/user", patientRouter);
+app.use("/api/patient", patientRouter);
 app.use("/api/appointments", appointmentRouter);
 
 app.get("/", (req, res) => {

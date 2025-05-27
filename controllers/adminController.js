@@ -20,6 +20,7 @@ const addDoctor = async (req, res) => {
       about,
       fees,
       address,
+      status
     } = req.body;
     const imageFile = req.file;
 
@@ -75,9 +76,11 @@ const addDoctor = async (req, res) => {
       experience,
       about,
       fees,
+      status,
       image: imageUrl,
       address: JSON.parse(address),
       date: Date.now(),
+
     };
 
     const newDoctor = new doctorModel(doctorData);
@@ -225,10 +228,70 @@ const addLaboratory = async (req, res) => {
   }
 };
 
+const sendDataForBarPlot = async (req, res) => {
+  try {
+    const data = await doctorModel.aggregate([
+      {
+        $group: {
+          _id: "$speciality",
+          count: { $sum: 1 }
+        }
+      }
+    ]);
+
+    // Transform result into array: [{ id, label, value, color }]
+    const formattedData = data.map((item, index) => ({
+      id: item._id,
+      label: item._id,
+      value: item.count,
+      // color: `hsl(${(index * 50) % 360}, 70%, 50%)`
+    }));
+
+    res.status(200).json({
+      success: true,
+      data: formattedData
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ success: false, message: error.message });
+  }
+};
+
+const sendDateForPiePlot = async (req, res) => {
+  try {
+    const data = await doctorModel.aggregate([
+      {
+        $group: {
+          _id: "$experience",
+          count: { $sum: 1 }
+        }
+      }
+    ]);
+
+    const formattedData = data.map((item, index) => ({
+      id: item._id,
+      label: item._id,
+      value: item.count,
+      // color: `hsl(${(index * 45) % 360}, 70%, 50%)`
+    }));
+
+    res.status(200).json({
+      success: true,
+      data: formattedData
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ success: false, message: error.message });
+  }
+};
+
+
 export {
   addDoctor,
   loginAdmin,
   deleteDoctor,
   deletePatient,
   getAppointmentList,
+  sendDataForBarPlot,
+  sendDateForPiePlot
 };

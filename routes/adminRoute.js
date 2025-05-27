@@ -6,6 +6,8 @@ import {
   deletePatient,
   getAppointmentList,
   loginAdmin,
+  sendDataForBarPlot,
+  sendDateForPiePlot,
 } from "../controllers/adminController.js";
 
 import upload from "../middlewares/multer.js";
@@ -40,4 +42,18 @@ adminRouter.get(
   allowedTo("admin"),
   getAppointmentList
 );
+
+adminRouter.get(
+  "/get-barplot",
+  protect,
+  allowedTo("admin"),
+  sendDataForBarPlot
+)
+
+adminRouter.get(
+  "/get-pieplot",
+  protect,
+  allowedTo("admin"),
+  sendDateForPiePlot
+)
 export default adminRouter;

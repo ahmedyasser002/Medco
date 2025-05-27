@@ -1,5 +1,6 @@
 import express from "express";
 import {
+  bookAppointment,
   listAppointmentByDoctorId,
   listAppointmentByPatientId,
 } from "../controllers/appointmentController.js";
@@ -9,5 +10,6 @@ const appointmentRouter = express.Router();
 
 appointmentRouter.get("/doctor", protect, allowedTo('doctor'), listAppointmentByDoctorId);
 appointmentRouter.get("/patient", protect, listAppointmentByPatientId);
+appointmentRouter.post("/book",bookAppointment)
 
 export default appointmentRouter;

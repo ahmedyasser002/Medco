@@ -7,10 +7,10 @@ import doctorModel from "../models/doctorModel.js";
 import appointmentModel from "../models/appointmentModel.js";
 
 // API to Register User
-const registerUser = async (req, res) => {
+const registerPatient = async (req, res) => {
   try {
-    const { name, email, password } = req.body;
-    if (!name || !password || !email) {
+    const { name, email, password , gender } = req.body;
+    if (!name || !password || !email || !gender) {
       return res
         .status(400)
         .json({ success: false, message: "Please fill in all fields" });
@@ -38,6 +38,7 @@ const registerUser = async (req, res) => {
       name,
       email,
       password: hashedPassword,
+      gender
     };
 
     // Creating User in Database
@@ -60,7 +61,7 @@ const registerUser = async (req, res) => {
 };
 
 // API for User Login
-const loginUser = async (req, res) => {
+const loginPatient = async (req, res) => {
   try {
     const { email, password } = req.body;
     if (!email || !password) {
@@ -187,4 +188,4 @@ const getPatientList = async (req,res)=>{
         
     }
 }
-export { registerUser, loginUser, getProfile, updateProfile , getPatientList }
+export { registerPatient, loginPatient, getProfile, updateProfile , getPatientList }

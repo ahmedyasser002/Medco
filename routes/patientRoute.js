@@ -1,7 +1,7 @@
 import express from "express";
 import {
-  registerUser,
-  loginUser,
+  registerPatient,
+  loginPatient,
   getProfile,
   updateProfile,
   getPatientList,
@@ -18,8 +18,8 @@ import authAdmin from "../middlewares/authAdmin.js";
 
 const patientRouter = express.Router();
 
-patientRouter.post("/register", registerUser);
-patientRouter.post("/login", loginUser);
+patientRouter.post("/register", registerPatient);
+patientRouter.post("/login", loginPatient);
 
 patientRouter.get("/get-profile", protect, getProfile);
 
