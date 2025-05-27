@@ -1,8 +1,8 @@
 import mongoose from 'mongoose'
 
-const connectedDB = async () => {
+const connectDB = async () => {
     mongoose.connection.on('connected' , ()=> console.log("Database Connected"));
     await mongoose.connect(`${process.env.MONGODB_URL}/medco`)
 }
 
-export default connectedDB
+export default connectDB

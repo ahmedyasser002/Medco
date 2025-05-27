@@ -1,11 +1,10 @@
 import validator from "validator";
 import bcrypt from "bcrypt";
-import userModel from "../models/userModel.js";
+import patientModel from "../models/patientModel.js";
 import jwt from "jsonwebtoken";
 import { v2 as cloudinary } from "cloudinary";
 import doctorModel from "../models/doctorModel.js";
 import appointmentModel from "../models/appointmentModel.js";
-import razorpay from "razorpay";
 
 // API to Register User
 const registerUser = async (req, res) => {
@@ -42,7 +41,7 @@ const registerUser = async (req, res) => {
     };
 
     // Creating User in Database
-    const newUser = new userModel(userData);
+    const newUser = new patientModel(userData);
     const user = await newUser.save();
     // res.status(201).json({success:true , message: "User created successfully"  , user});
 
@@ -70,7 +69,7 @@ const loginUser = async (req, res) => {
         .json({ success: false, message: "Please fill in all fields" });
     }
     // Find User in Database
-    const user = await userModel.findOne({ email });
+    const user = await patientModel.findOne({ email });
     if (!user) {
       return res
         .status(400)
@@ -97,7 +96,7 @@ const loginUser = async (req, res) => {
 const getProfile = async (req, res) => {
   try {
     const userId = req.userId;
-    const userData = await userModel.findById(userId).select("-password");
+    const userData = await patientModel.findById(userId).select("-password");
     res
       .status(200)
       .json({ success: true, message: "User Profile Data", userData });
@@ -149,7 +148,7 @@ const updateProfile = async (req, res) => {
     }
 
     // Perform update
-    const updatedUser = await userModel.findByIdAndUpdate(userId, updateData, {
+    const updatedUser = await patientModel.findByIdAndUpdate(userId, updateData, {
       new: true,
     });
 
@@ -178,9 +177,8 @@ const updateProfile = async (req, res) => {
 const getPatientList = async (req,res)=>{
 
  try {
-       
 
-        const patients = await userModel.find({}).select(['-password']);
+        const patients = await patientModel.find({}).select(['-password']);
         res.status(200).json({ success: true, data: patients });
 
     } catch (error) {
@@ -215,7 +213,7 @@ const bookAppointment = async (req ,res)=>{
       slots_booked[slotDate] = []
       slots_booked[slotDate].push(slotTime)
     }
-    const userData = await userModel.findById(userId).select('-password');
+    const userData = await patientModel.findById(userId).select('-password');
     delete docData.slots_booked;
     
     const appointmentData = {
@@ -245,7 +243,7 @@ const bookAppointment = async (req ,res)=>{
 
 // Api to get user appointments for frontend my-appointments page
 
-const listAppointment = async(req,res)=>{
+const listAppointmentByPatientId = async(req,res)=>{
 
   try {
 
@@ -302,4 +300,4 @@ const cancelAppointment = async(req,res) =>{
 // }
 
 
-export { registerUser, loginUser, getProfile, updateProfile , getPatientList , bookAppointment , listAppointment , cancelAppointment };
+export { registerUser, loginUser, getProfile, updateProfile , getPatientList , bookAppointment , listAppointmentByPatientId , cancelAppointment };

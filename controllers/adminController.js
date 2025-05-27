@@ -2,7 +2,7 @@ import validator from "validator";
 import bcrypt from "bcrypt";
 import { v2 as cloudinary } from "cloudinary";
 import doctorModel from "../models/doctorModel.js";
-import userModel from "../models/userModel.js";
+import patientModel from "../models/patientModel.js";
 import jwt from "jsonwebtoken";
 import appointmentModel from "../models/appointmentModel.js";
 import laboratoryModel from "../models/laboratoryModel.js";
@@ -112,13 +112,13 @@ const loginAdmin = async (req, res) => {
       const doctor = await doctorModel.findOne({ email });
 
       const token = jwt.sign(doctor._id, process.env.JWT_SECRET);
-      
+
       res.status(200).json({
         success: true,
         message: "Doctor logged in successfully",
         role: "doctor",
         token,
-        id: doctor._id
+        id: doctor._id,
       });
     } else {
       return res
@@ -147,7 +147,7 @@ const deleteDoctor = async (req, res) => {
 const deletePatient = async (req, res) => {
   try {
     const { patientId } = req.body;
-    await userModel.findByIdAndDelete(patientId);
+    await patientModel.findByIdAndDelete(patientId);
     res.status(200).json({ success: true, message: "Patient Deleted" });
   } catch (error) {
     console.log(error);
