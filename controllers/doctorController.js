@@ -68,53 +68,25 @@ const getAllDoctors = async (req, res) => {
   }
 };
 
-
-const sendDoctorPatientStats = async (req, res) => {
+const getUsersWithAppointments = async (req, res) => {
   try {
-    const doctorId = req.user.id; // Get doctor ID from auth token
+    const doctorId = req.user._id;
 
-    const data = await appointmentModel.aggregate([
-      {
-        $match: { docId: new mongoose.Types.ObjectId(doctorId) }
-      },
-      {
-        $group: {
-          _id: "$docId",
-          totalPatients: { $sum: 1 },
-          genderCounts: { $push: "$userData.gender" }
-        }
-      },
-      {
-        $project: {
-          _id: 0,
-          doctorId: "$_id",
-          totalPatients: 1,
-          male: {
-            $size: {
-              $filter: {
-                input: "$genderCounts",
-                as: "g",
-                cond: { $eq: ["$$g", "male"] }
-              }
-            }
-          },
-          female: {
-            $size: {
-              $filter: {
-                input: "$genderCounts",
-                as: "g",
-                cond: { $eq: ["$$g", "female"] }
-              }
-            }
-          }
-        }
-      }
-    ]);
-
-    res.status(200).json({
-      success: true,
-      data: data[0] || { totalPatients: 0, male: 0, female: 0 }
+    const appointments = await appointmentModel.find({
+      "docId": doctorId,
     });
+
+    // Extract userData from appointments
+    const users = appointments.map(app => app.userData);
+
+    // Remove duplicates by converting to a Map and back to array
+    const uniqueUsers = users.filter((user, index, self) => 
+      index === self.findIndex((u) => (
+        u._id.toString() === user._id.toString()
+      ))
+    );
+
+    res.status(200).json({ success: true, data: uniqueUsers });
   } catch (error) {
     console.error(error);
     res.status(500).json({ success: false, message: error.message });
@@ -122,6 +94,8 @@ const sendDoctorPatientStats = async (req, res) => {
 };
 
 
+
+
 // const doctorLogin
 
-export { changeAvailability, getAllDoctors , login , sendDoctorPatientStats };
+export { changeAvailability, getAllDoctors , login , getUsersWithAppointments  };
