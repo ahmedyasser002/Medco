@@ -14,6 +14,7 @@ import { protect, allowedTo } from "../middlewares/auth-middleware.js";
 import upload from "../middlewares/multer.js";
 
 import authAdmin from "../middlewares/authAdmin.js";
+import patientModel from "../models/patientModel.js";
 
 
 const patientRouter = express.Router();
@@ -31,7 +32,7 @@ patientRouter.get("/get-profile", protect(), getProfile);
 // );
 
 patientRouter.get("/list", protect(), allowedTo("admin"), getPatientList);
-patientRouter.patch('/update-profile', upload.single('image'), updateProfile);
+patientRouter.patch('/update-profile',protect(patientModel), upload.single('image'), updateProfile);
 
 
 // patientRouter.post("/book-appointment", protect, bookAppointment);

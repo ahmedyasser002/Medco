@@ -46,7 +46,7 @@ const registerPatient = async (req, res) => {
     const user = await newUser.save();
     // res.status(201).json({success:true , message: "User created successfully"  , user});
 
-    const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET);
+    const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET);
     res
       .status(201)
       .json({
@@ -84,10 +84,10 @@ const loginPatient = async (req, res) => {
         .json({ success: false, message: "Invalid email or password" });
     }
     // Generating Token
-    const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET);
+    const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET);
     res
       .status(200)
-      .json({ success: true, message: "Logged in successfully", token });
+      .json({ success: true, message: "Logged in successfully", token , user });
   } catch (error) {
     res.status(500).json({ success: false, message: error.message });
   }
@@ -177,7 +177,9 @@ const getProfile = async (req, res) => {
 const updateProfile = async (req, res) => {
   try {
     // const userId = req.user._id
-    const { userId ,  name, phone, address, dob, gender } = req.body;
+        const userId = req.user._id;  // get id from auth middleware
+
+    const { name, phone, address, dob, gender } = req.body;
     const imageFile = req.file;
 
     // Ensure userId is provided
