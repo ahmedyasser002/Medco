@@ -108,8 +108,21 @@ const findDocById = async (req,res) => {
   
 }
 
+const findDocBySpeciality = async (req,res) => {
 
+  try {
+    const { speciality } = req.body;
+    const doctors = await doctorModel.find({ speciality: speciality });
+    res.status(200).json({ success: true, data: doctors });
+
+    
+  } catch (error) {
+    res.status(500).json({ success: false, message: error.message });
+    
+  }
+  
+}
 
 // const doctorLogin
 
-export { changeAvailability, getAllDoctors , login , getUsersWithAppointments  , findDocById };
+export { changeAvailability, getAllDoctors , login , getUsersWithAppointments  , findDocById , findDocBySpeciality };
