@@ -93,9 +93,23 @@ const getUsersWithAppointments = async (req, res) => {
   }
 };
 
+const findDocById = async (req,res) => {
+  try {
+    const userId = req.user._id;
+     const { docId } = req.body;
+    const docData = await doctorModel.findById(docId);
+        res.status(200).json({ success: true, data: docData });
+
+    
+  } catch (error) {
+    res.status(500).json({ success: false, message: error.message });
+    
+  }
+  
+}
 
 
 
 // const doctorLogin
 
-export { changeAvailability, getAllDoctors , login , getUsersWithAppointments  };
+export { changeAvailability, getAllDoctors , login , getUsersWithAppointments  , findDocById };
