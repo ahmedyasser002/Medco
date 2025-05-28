@@ -96,7 +96,7 @@ const loginPatient = async (req, res) => {
 // API to Get User Profile Data
 const getProfile = async (req, res) => {
   try {
-    const userId = req.userId;
+    const userId = req.user._id;
     const userData = await patientModel.findById(userId).select("-password");
     res
       .status(200)

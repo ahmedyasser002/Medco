@@ -22,7 +22,7 @@ const patientRouter = express.Router();
 patientRouter.post("/register", registerPatient);
 patientRouter.post("/login", loginPatient);
 
-patientRouter.get("/get-profile", protect(), getProfile);
+patientRouter.get("/get-profile", protect(patientModel), getProfile);
 
 // patientRouter.post(
 //   "/update-profile",
