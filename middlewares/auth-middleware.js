@@ -7,41 +7,48 @@ const verifyToken = (token) => jwt.verify(token, process.env.JWT_SECRET);
 
 // @ desc   Check if user is logged in
 
-const protect = async (req, res, next) => {
-  // 1- Check if token exist
+const protect = (model = doctorModel) => {
+  return async (req, res, next) => {
+    try {
+      // 1- Check if token exists
+      let token;
+      if (
+        req.headers.authorization &&
+        req.headers.authorization.startsWith("Bearer")
+      ) {
+        token = req.headers.authorization.split(" ")[1];
+      }
 
-  let token;
-  if (
-    req.headers.authorization &&
-    req.headers.authorization.startsWith("Bearer")
-  ) {
-    token = req.headers.authorization.split(" ")[1];
-  }
+      if (!token) {
+        return res.status(401).json({
+          success: false,
+          message: "Not Authorized: Token is missing",
+        });
+      }
 
-  if (!token) {
-    return res
-      .status(401)
-      .json({ success: false, message: "Not Authorized: Token is missing" });
-  }
+      // 2- Verify token
+      const decodedToken = verifyToken(token);
 
-  // 2- Verify token (Change in token - Expired token)
+      // 3- Check if User exists
+      const user = await model.findById(decodedToken.userId);
 
-  const decodedToken = verifyToken(token);
+      if (!user) {
+        return res.status(401).json({
+          success: false,
+          message: "User for this token not found",
+        });
+      }
 
-  // 3- Check if User exists
-
-  const user = await doctorModel.findById(decodedToken.userId);
-
-  if (!user) {
-    return res
-      .status(401)
-      .json({ success: false, message: "User for this token not found" });
-  }
-
-  // Add user to request object
-  req.user = user;
-
-  next();
+      req.user = user;
+      next();
+    } catch (error) {
+      console.error("Auth error:", error);
+      res.status(401).json({
+        success: false,
+        message: "Not authorized",
+      });
+    }
+  };
 };
 
 // @desc Authorization (User Permissions)

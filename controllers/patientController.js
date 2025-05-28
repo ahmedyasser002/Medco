@@ -106,41 +106,106 @@ const getProfile = async (req, res) => {
   }
 };
 
-// API to Update User Profile
+// // API to Update User Profile
+// const updateProfile = async (req, res) => {
+//   try {
+//     const { userId, name, phone, address, dob, gender } = req.body;
+//     const imageFile = req.file;
+
+//     // Validate required fields
+//     if (!name || !phone || !dob || !gender) {
+//       return res.status(400).json({
+//         success: false,
+//         message: "Missing required fields: userId, name, phone, dob, or gender",
+//       });
+//     }
+
+//     // Parse address safely
+//     let parsedAddress;
+//     try {
+//       parsedAddress = address ? JSON.parse(address) : {};
+//     } catch (err) {
+//       return res.status(400).json({
+//         success: false,
+//         message: "Invalid address format. Must be valid JSON.",
+//       });
+//     }
+
+//     // Prepare update data
+//     const updateData = {
+//       name,
+//       phone,
+//       dob,
+//       gender,
+//       address: parsedAddress,
+//     };
+
+//     // Handle image upload if exists
+//     if (imageFile) {
+//       const imageUpload = await cloudinary.uploader.upload(imageFile.path, {
+//         resource_type: "image",
+//       });
+//       updateData.image = imageUpload.secure_url;
+//     }
+
+//     // Perform update
+//     const updatedUser = await patientModel.findByIdAndUpdate(userId, updateData, {
+//       new: true,
+//     });
+
+//     // Check if user was found
+//     if (!updatedUser) {
+//       return res.status(404).json({
+//         success: false,
+//         message: "User found",
+//       });
+//     }
+
+//     res.status(200).json({
+//       success: true,
+//       message: "Profile updated successfully",
+//       data: updatedUser,
+//     });
+//   } catch (error) {
+//     console.error("Update Profile Error:", error);
+//     res.status(500).json({
+//       success: false,
+//       message: error.message,
+//     });
+//   }
+// };
 const updateProfile = async (req, res) => {
   try {
-    const { userId, name, phone, address, dob, gender } = req.body;
+    // const userId = req.user._id
+    const { userId ,  name, phone, address, dob, gender } = req.body;
     const imageFile = req.file;
 
-    // Validate required fields
-    if (!name || !phone || !dob || !gender) {
+    // Ensure userId is provided
+    if (!userId) {
       return res.status(400).json({
         success: false,
-        message: "Missing required fields: userId, name, phone, dob, or gender",
+        message: "Missing required field: userId",
       });
     }
 
-    // Parse address safely
-    let parsedAddress;
-    try {
-      parsedAddress = address ? JSON.parse(address) : {};
-    } catch (err) {
-      return res.status(400).json({
-        success: false,
-        message: "Invalid address format. Must be valid JSON.",
-      });
+    const updateData = {};
+
+    if (name) updateData.name = name;
+    if (phone) updateData.phone = phone;
+    if (dob) updateData.dob = dob;
+    if (gender) updateData.gender = gender;
+
+    if (address) {
+      try {
+        updateData.address = JSON.parse(address);
+      } catch (err) {
+        return res.status(400).json({
+          success: false,
+          message: "Invalid address format. Must be valid JSON.",
+        });
+      }
     }
 
-    // Prepare update data
-    const updateData = {
-      name,
-      phone,
-      dob,
-      gender,
-      address: parsedAddress,
-    };
-
-    // Handle image upload if exists
     if (imageFile) {
       const imageUpload = await cloudinary.uploader.upload(imageFile.path, {
         resource_type: "image",
@@ -148,16 +213,14 @@ const updateProfile = async (req, res) => {
       updateData.image = imageUpload.secure_url;
     }
 
-    // Perform update
     const updatedUser = await patientModel.findByIdAndUpdate(userId, updateData, {
       new: true,
     });
 
-    // Check if user was found
     if (!updatedUser) {
       return res.status(404).json({
         success: false,
-        message: "User found",
+        message: "User not found",
       });
     }
 
@@ -166,6 +229,7 @@ const updateProfile = async (req, res) => {
       message: "Profile updated successfully",
       data: updatedUser,
     });
+
   } catch (error) {
     console.error("Update Profile Error:", error);
     res.status(500).json({

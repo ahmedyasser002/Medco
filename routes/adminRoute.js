@@ -21,38 +21,38 @@ const adminRouter = express.Router();
 
 adminRouter.post(
   "/add-doctor",
-  protect,
+  protect(),
   allowedTo("admin"),
   upload.single("image"),
   addDoctor
 );
 
-adminRouter.delete("/delete-doctor", protect, allowedTo("admin"), deleteDoctor);
+adminRouter.delete("/delete-doctor", protect(), allowedTo("admin"), deleteDoctor);
 
 adminRouter.delete(
   "/delete-patient",
-  protect,
+  protect(),
   allowedTo("admin"),
   deletePatient
 );
 
 adminRouter.get(
   "/get-appointments",
-  protect,
+  protect(),
   allowedTo("admin"),
   getAppointmentList
 );
 
 adminRouter.get(
   "/get-barplot",
-  protect,
+  protect(),
   allowedTo("admin"),
   sendDataForBarPlot
 )
 
 adminRouter.get(
   "/get-pieplot",
-  protect,
+  protect(),
   allowedTo("admin"),
   sendDateForPiePlot
 )

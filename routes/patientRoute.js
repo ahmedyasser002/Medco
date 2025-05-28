@@ -21,16 +21,18 @@ const patientRouter = express.Router();
 patientRouter.post("/register", registerPatient);
 patientRouter.post("/login", loginPatient);
 
-patientRouter.get("/get-profile", protect, getProfile);
+patientRouter.get("/get-profile", protect(), getProfile);
 
-patientRouter.post(
-  "/update-profile",
-  protect,
-  upload.single("image"),
-  updateProfile
-);
+// patientRouter.post(
+//   "/update-profile",
+//   protect,
+//   upload.single("image"),
+//   updateProfile
+// );
 
-patientRouter.get("/list", protect, allowedTo("admin"), getPatientList);
+patientRouter.get("/list", protect(), allowedTo("admin"), getPatientList);
+patientRouter.patch('/update-profile', upload.single('image'), updateProfile);
+
 
 // patientRouter.post("/book-appointment", protect, bookAppointment);
 // patientRouter.get("/list-appointments", protect, listAppointmentByPatientId);
