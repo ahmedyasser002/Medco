@@ -3,6 +3,7 @@ import {
   bookAppointment,
   listAppointmentByDoctorId,
   listAppointmentByPatientId,
+  cancelAppointment
 } from "../controllers/appointmentController.js";
 import { allowedTo, protect } from "../middlewares/auth-middleware.js";
 import patientModel from "../models/patientModel.js";

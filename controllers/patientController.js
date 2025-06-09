@@ -5,7 +5,7 @@ import jwt from "jsonwebtoken";
 import { v2 as cloudinary } from "cloudinary";
 import doctorModel from "../models/doctorModel.js";
 import appointmentModel from "../models/appointmentModel.js";
-import { isValidEgyptianNationalID } from "../validators/validateEgyptianID.js";
+// import { isValidEgyptianNationalID } from "../validators/validateEgyptianID.js";
 
 // API to Register User
 const registerPatient = async (req, res) => {
@@ -24,13 +24,13 @@ const registerPatient = async (req, res) => {
         .json({ success: false, message: "Invalid email address" });
     }
 
-    if (!isValidEgyptianNationalID) {
+    // if (!isValidEgyptianNationalID) {
 
-      return res
-      .status(400)
-      .json({ success: false, message: "Invalid National ID" });
+    //   return res
+    //   .status(400)
+    //   .json({ success: false, message: "Invalid National ID" });
       
-    }
+    // }
 
     // Validating Strong Password
     if (password.length < 8) {

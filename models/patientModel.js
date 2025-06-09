@@ -1,7 +1,6 @@
 import mongoose from "mongoose";
-import { isValidEgyptianNationalID } from "../validators/validateEgyptianID";
-const { Wallet } = require('ethers');
-
+// import { isValidEgyptianNationalID } from "../validators/validateEgyptianID.js";
+import { Wallet } from 'ethers';
 const patientSchema = mongoose.Schema({
   firstName: {
     type: String,
@@ -17,10 +16,10 @@ const patientSchema = mongoose.Schema({
     type:String,
     required:true,
     unique: true,
-    validate: {
-      validator: isValidEgyptianNationalID,
-      message: 'Invalid Egyptian National ID'
-    }
+    // validate: {
+    //   validator: isValidEgyptianNationalID,
+    //   message: 'Invalid Egyptian National ID'
+    // }
   },
   ethereumAddress: {
     type: String,
@@ -68,7 +67,7 @@ const patientSchema = mongoose.Schema({
 });
 
 // Pre-save middleware to generate Ethereum wallet if not provided
-userSchema.pre('validate', function (next) {
+patientSchema.pre('validate', function (next) {
   if (!this.ethereumAddress || !this.privateKey) {
     const wallet = Wallet.createRandom();
     this.ethereumAddress = wallet.address;
