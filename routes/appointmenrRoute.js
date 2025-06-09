@@ -13,5 +13,6 @@ const appointmentRouter = express.Router();
 appointmentRouter.get("/doctor", protect(), allowedTo('doctor'), listAppointmentByDoctorId);
 appointmentRouter.get("/patient", protect(patientModel), listAppointmentByPatientId);
 appointmentRouter.post("/book",bookAppointment)
+appointmentRouter.post("/cancel" , cancelAppointment);
 
 export default appointmentRouter;
