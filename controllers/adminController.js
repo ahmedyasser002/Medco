@@ -6,9 +6,11 @@ import patientModel from "../models/patientModel.js";
 import jwt from "jsonwebtoken";
 import appointmentModel from "../models/appointmentModel.js";
 import laboratoryModel from "../models/laboratoryModel.js";
-
+import streamifier from "streamifier";  // Required if using memoryStorage
+import sharp from "sharp";
 // API for adding doctor
 const addDoctor = async (req, res) => {
+  
   try {
     const {
       name,
@@ -61,11 +63,33 @@ const addDoctor = async (req, res) => {
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(password, salt);
 
+    let updateData;
+
     // Upload image to cloudinary
-    const imageUpload = await cloudinary.uploader.upload(imageFile.path, {
-      resource_type: "image",
-    });
-    const imageUrl = imageUpload.secure_url;
+    if (imageFile) {
+      const resizedBuffer = await sharp(imageFile.buffer)
+        .resize(400, 400)
+        .toFormat("jpeg")
+        .jpeg({ quality: 90 })
+        .toBuffer();
+    
+      const streamUpload = (buffer) => {
+        return new Promise((resolve, reject) => {
+          const stream = cloudinary.uploader.upload_stream(
+            { resource_type: "image" },
+            (error, result) => {
+              if (result) resolve(result);
+              else reject(error);
+            }
+          );
+          streamifier.createReadStream(buffer).pipe(stream);
+        });
+      };
+    
+      const result = await streamUpload(resizedBuffer);
+      updateData.image = result.secure_url;
+    }
+    
 
     const doctorData = {
       name,
@@ -77,7 +101,7 @@ const addDoctor = async (req, res) => {
       about,
       fees,
       status,
-      image: imageUrl,
+      image: updateData.image,
       address: JSON.parse(address),
       date: Date.now(),
 
