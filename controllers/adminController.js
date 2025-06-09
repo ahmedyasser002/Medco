@@ -8,6 +8,7 @@ import appointmentModel from "../models/appointmentModel.js";
 import laboratoryModel from "../models/laboratoryModel.js";
 import streamifier from "streamifier";  // Required if using memoryStorage
 import sharp from "sharp";
+import uploadAndResizeImage  from "../utils/uploadAndResizeImage.js";
 // API for adding doctor
 const addDoctor = async (req, res) => {
   
@@ -63,31 +64,11 @@ const addDoctor = async (req, res) => {
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(password, salt);
 
-    let updateData;
+    let imageUrl = null;
 
     // Upload image to cloudinary
     if (imageFile) {
-      const resizedBuffer = await sharp(imageFile.buffer)
-        .resize(400, 400)
-        .toFormat("jpeg")
-        .jpeg({ quality: 90 })
-        .toBuffer();
-    
-      const streamUpload = (buffer) => {
-        return new Promise((resolve, reject) => {
-          const stream = cloudinary.uploader.upload_stream(
-            { resource_type: "image" },
-            (error, result) => {
-              if (result) resolve(result);
-              else reject(error);
-            }
-          );
-          streamifier.createReadStream(buffer).pipe(stream);
-        });
-      };
-    
-      const result = await streamUpload(resizedBuffer);
-      updateData.image = result.secure_url;
+      imageUrl = await uploadAndResizeImage(imageFile, "Doctors");
     }
     
 
@@ -101,7 +82,7 @@ const addDoctor = async (req, res) => {
       about,
       fees,
       status,
-      image: updateData.image,
+      image: imageUrl,
       address: JSON.parse(address),
       date: Date.now(),
 
@@ -118,6 +99,8 @@ const addDoctor = async (req, res) => {
     console.log(error);
     res.status(500).json({ success: false, message: error.message });
   }
+
+
 };
 
 // API for admin login

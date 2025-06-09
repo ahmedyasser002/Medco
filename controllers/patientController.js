@@ -5,6 +5,7 @@ import jwt from "jsonwebtoken";
 import { v2 as cloudinary } from "cloudinary";
 import doctorModel from "../models/doctorModel.js";
 import appointmentModel from "../models/appointmentModel.js";
+import uploadAndResizeImage from "../utils/uploadAndResizeImage.js";
 
 // API to Register User
 const registerPatient = async (req, res) => {
@@ -113,7 +114,7 @@ const updateProfile = async (req, res) => {
     // const userId = req.user._id
         const userId = req.user._id;  // get id from auth middleware
 
-    const { name, phone, address, dob, gender } = req.body;
+    const { firstName, lastName ,phone, address, dob, gender } = req.body;
     const imageFile = req.file;
 
     // Ensure userId is provided
@@ -126,7 +127,8 @@ const updateProfile = async (req, res) => {
 
     const updateData = {};
 
-    if (name) updateData.name = name;
+    if (firstName) updateData.firstName = firstName;
+    if (lastName) updateData.lastName = lastName;
     if (phone) updateData.phone = phone;
     if (dob) updateData.dob = dob;
     if (gender) updateData.gender = gender;
@@ -141,14 +143,13 @@ const updateProfile = async (req, res) => {
         });
       }
     }
+    let imageUrl = null;
 
-    if (imageFile) {
-      const imageUpload = await cloudinary.uploader.upload(imageFile.path, {
-        resource_type: "image",
-      });
-      updateData.image = imageUpload.secure_url;
-    }
-
+   // Upload image to cloudinary
+   if (imageFile) {
+    imageUrl = await uploadAndResizeImage(imageFile, "Patients");
+  }
+  
     const updatedUser = await patientModel.findByIdAndUpdate(userId, updateData, {
       new: true,
     });

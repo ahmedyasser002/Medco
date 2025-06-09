@@ -10,10 +10,10 @@ import {
   sendDateForPiePlot,
 } from "../controllers/adminController.js";
 
-import upload from "../middlewares/multer.js";
 
 import authAdmin from "../middlewares/authAdmin.js";
 import { allowedTo, protect } from "../middlewares/auth-middleware.js";
+import upload from "../middlewares/uploadMiddleware.js";
 
 const adminRouter = express.Router();
 

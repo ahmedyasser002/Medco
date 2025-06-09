@@ -11,10 +11,10 @@ import {
 } from "../controllers/patientController.js";
 
 import { protect, allowedTo } from "../middlewares/auth-middleware.js";
-import upload from "../middlewares/multer.js";
 
 import authAdmin from "../middlewares/authAdmin.js";
 import patientModel from "../models/patientModel.js";
+import upload from "../middlewares/uploadMiddleware.js";
 
 
 const patientRouter = express.Router();
