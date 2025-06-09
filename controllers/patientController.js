@@ -148,6 +148,7 @@ const updateProfile = async (req, res) => {
    // Upload image to cloudinary
    if (imageFile) {
     imageUrl = await uploadAndResizeImage(imageFile, "Patients");
+    updateData.image = imageUrl;
   }
   
     const updatedUser = await patientModel.findByIdAndUpdate(userId, updateData, {
