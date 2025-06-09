@@ -9,8 +9,8 @@ import appointmentModel from "../models/appointmentModel.js";
 // API to Register User
 const registerPatient = async (req, res) => {
   try {
-    const { firstName, lastName, email, password , gender } = req.body;
-    if (!firstName || !lastName || !password || !email || !gender) {
+    const { firstName, lastName, nationalID ,email, password , gender } = req.body;
+    if (!firstName || !lastName || !nationalID || !password || !email || !gender) {
       return res
         .status(400)
         .json({ success: false, message: "Please fill in all fields" });
@@ -37,6 +37,7 @@ const registerPatient = async (req, res) => {
     const userData = {
       firstName,
       lastName,
+      nationalID,
       email,
       password: hashedPassword,
       gender
