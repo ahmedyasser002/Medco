@@ -21,6 +21,23 @@ const doctorSchema = new mongoose.Schema(
     },
     speciality: {
       type: String,
+      enum: [
+        "General Physician",
+        "Surgeon",
+        "Gynecologist",
+        "Dermatologist",
+        "Pediatrician",
+        "Neurologist",
+        "Gastroenterologist",
+        "Cardiologist",
+        "Urologist",
+        "Ophthalmologist",
+        "Psychiatrist",
+        "Endocrinologist",
+        "Oncologist",
+        "Radiologist",
+        "Pathologist"
+      ],
       required: true,
     },
     degree: {
@@ -61,7 +78,7 @@ const doctorSchema = new mongoose.Schema(
     },
     role: {
       type: String,
-      emum: ['doctor', 'admin'],
+      enum: ['doctor', 'admin'],
       default: 'doctor',
     },
   },
