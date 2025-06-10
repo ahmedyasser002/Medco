@@ -7,6 +7,20 @@ const MONGO_URI = 'mongodb+srv://ahmed:ahmed_yasser2002@cluster0.v8lap.mongodb.n
 const cloudinaryImageURL = "https://res.cloudinary.com/dojelkeau/image/upload/v1/Doctors/doctor.jpeg";
 
 const seedDoctors = [
+    {
+    name: "Admin",
+    email: "admin@admin.com",
+    password: "admin1234",
+    role: "admin",
+    image: cloudinaryImageURL,
+    speciality: "Surgeon",
+    degree: "-",
+    experience: "-",
+    about: "System administrator with full access.",
+    fees: 0,
+    address: { street: "-", city: "-", country: "-" },
+    date: Date.now(),
+  },
   {
     name: "Dr. Ahmed Hossam",
     email: "ahmed.hossam@gmail.com",
