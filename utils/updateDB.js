@@ -3,7 +3,7 @@ import patientModel from "../models/patientModel.js"; // Adjust this path if nee
 
 const MONGO_URI = 'mongodb+srv://ahmed:ahmed_yasser2002@cluster0.v8lap.mongodb.net/medco';
 
-const cloudinaryBaseURL = 'https://res.cloudinary.com/dojelkeau/image/upload/v1/Patients/patient.jpeg';
+const cloudinaryBaseURL = 'https://res.cloudinary.com/dojelkeau/image/upload/v1749595751/patient_x96gnr.jpg';
 
 async function updatePatientImages() {
   try {
