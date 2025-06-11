@@ -58,9 +58,13 @@ const getAllDoctors = async (req, res) => {
   try {
     const { speciality } = req.query;
 
-    const filter = speciality ? { speciality } : {};
+    // Always filter by role: "doctor"
+    const filter = {
+      role: "doctor",
+      ...(speciality && { speciality }),
+    };
 
-    const doctors = await doctorModel.find(filter).select(["-password"]);
+    const doctors = await doctorModel.find(filter).select("-password");
     res.status(200).json({ success: true, data: doctors });
   } catch (error) {
     console.log(error);
