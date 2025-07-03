@@ -6,7 +6,7 @@ const labRouter = express.Router();
 
 labRouter.get("/get-lab" , protect() , allowedTo("doctor") , getAllLaboratories);
 labRouter.get("/get-tests", protect() , allowedTo("laboratory") , getTests);
-labRouter.post("/add-test", protect() , allowedTo("laboratory") , addTest);
+labRouter.post("/add-test", protect() , allowedTo("doctor") , addTest);
 
 
 export default labRouter;
