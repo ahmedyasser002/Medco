@@ -1,6 +1,6 @@
 import doctorModel from "../models/doctorModel.js";
 import patientModel from "../models/patientModel.js";
-
+import mongoose from "mongoose";
 
 const getAllLaboratories = async (req, res) => {
   try {
