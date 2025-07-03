@@ -105,4 +105,40 @@ const addTest = async (req, res) => {
   }
 };
 
-export {getAllLaboratories, getTests , addTest}
+const completeTest = async (req, res) => {
+  const { testId } = req.body;
+
+  try {
+    // Find the lab that contains the test
+    const lab = await doctorModel.findOne({
+      role: "laboratory",
+      "tests._id": testId,
+    });
+
+    if (!lab) {
+      return res.status(404).json({ success: false, message: "Test not found in any lab" });
+    }
+
+    // Find the test in the lab's tests array
+    const test = lab.tests.id(testId);
+
+    if (!test) {
+      return res.status(404).json({ success: false, message: "Test not found" });
+    }
+
+    // Update the isCompleted field
+    test.isCompleted = true;
+
+    // Save the updated lab document
+    await lab.save();
+
+    res.status(200).json({ success: true, message: "Test marked as completed", data: test });
+  } catch (error) {
+    console.error("Error updating test:", error);
+    res.status(500).json({ success: false, message: "Server error" });
+  }
+};
+
+
+
+export {getAllLaboratories, getTests , addTest , completeTest}
