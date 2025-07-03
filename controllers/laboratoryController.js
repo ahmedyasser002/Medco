@@ -122,8 +122,7 @@ const completeTest = async (req, res) => {
       return res.status(404).json({ success: false, message: "Test not found in any lab" });
     }
 
-    // Find the test in the lab's tests array
-    const test = lab.tests.id(testId);
+   const test = lab.tests.find((test) => testId === test._id.toString());
 
     if (!test) {
       return res.status(404).json({ success: false, message: "Test not found" });
