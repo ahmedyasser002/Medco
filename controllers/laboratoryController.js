@@ -110,10 +110,13 @@ const completeTest = async (req, res) => {
 
   try {
     // Find the lab that contains the test
-    const lab = await doctorModel.findOne({
-      role: "laboratory",
-      "tests._id": testId,
-    });
+   const lab = await doctorModel.findOne({
+  role: "laboratory",
+  tests: {
+    $elemMatch: { _id: new mongoose.Types.ObjectId(testId) }
+  }
+});
+
 
     if (!lab) {
       return res.status(404).json({ success: false, message: "Test not found in any lab" });
