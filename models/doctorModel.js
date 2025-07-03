@@ -78,7 +78,7 @@ const doctorSchema = new mongoose.Schema(
     },
     tests:{
       required:false,
-      type: [Object]
+      type: [Object],
 
     },
     role: {

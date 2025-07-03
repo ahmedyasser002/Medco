@@ -1,4 +1,6 @@
 import doctorModel from "../models/doctorModel.js";
+import patientModel from "../models/patientModel.js";
+
 
 const getAllLaboratories = async (req, res) => {
   try {
@@ -18,6 +20,7 @@ const getAllLaboratories = async (req, res) => {
 
 // GET /api/laboratories/get-tests
 
+
 const getTests = async (req, res) => {
   try {
     const labId = req.user._id;
@@ -28,12 +31,45 @@ const getTests = async (req, res) => {
       return res.status(404).json({ success: false, message: "Laboratory not found" });
     }
 
-    res.status(200).json({ success: true, tests: lab.tests || [] });
+    const tests = lab.tests || [];
+
+    // Get all unique patientIds
+    const patientIds = [
+      ...new Set(
+        tests
+          .filter(test => test.patientId)
+          .map(test => test.patientId.toString())
+      )
+    ];
+
+    const patients = await patientModel.find({ _id: { $in: patientIds } }).select("-password");
+
+    const patientMap = new Map();
+    for (const patient of patients) {
+      patientMap.set(patient._id.toString(), patient);
+    }
+
+    const result = tests
+      .filter(test => test.patientId)
+      .map(test => {
+        const patient = patientMap.get(test.patientId.toString());
+        return {
+          patient,
+          test
+        };
+      })
+      .filter(entry => entry.patient);
+
+    res.status(200).json({
+      success: true,
+      data: result,
+    });
   } catch (error) {
     console.error("Error fetching tests:", error);
     res.status(500).json({ success: false, message: "Server error" });
   }
 };
+
 
 const addTest = async (req, res) => {
   try {
@@ -51,6 +87,7 @@ const addTest = async (req, res) => {
 
     // Optionally add patientId to test record
     const testEntry = {
+      _id:mongoose.Types.ObjectId(),
       ...test,
       patientId,
       createdAt: Date.now()
