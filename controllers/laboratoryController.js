@@ -1,3 +1,4 @@
+import mongoose from "mongoose";
 import doctorModel from "../models/doctorModel.js";
 import patientModel from "../models/patientModel.js";
 
@@ -87,8 +88,7 @@ const addTest = async (req, res) => {
 
     // Optionally add patientId to test record
     const testEntry = {
-      _id:mongoose.Types.ObjectId(),
-      ...test,
+  _id: new mongoose.Types.ObjectId(),
       patientId,
       createdAt: Date.now()
     };
