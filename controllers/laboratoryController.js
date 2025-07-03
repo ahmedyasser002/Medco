@@ -1,3 +1,5 @@
+import doctorModel from "../models/doctorModel.js";
+
 const getAllLaboratories = async (req, res) => {
   try {
 
