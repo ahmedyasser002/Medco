@@ -76,6 +76,11 @@ const doctorSchema = new mongoose.Schema(
       type: String,
       default: "Verified",
     },
+    tests:{
+      required:false,
+      type: [Object]
+
+    },
     role: {
       type: String,
       enum: ['doctor', 'admin' , 'laboratory'],

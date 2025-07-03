@@ -1,15 +1,12 @@
 import express from "express";
 import { allowedTo, protect } from "../middlewares/auth-middleware.js";
-import { getAllLaboratories } from "../controllers/laboratoryController.js";
+import { addTest, getAllLaboratories, getTests } from "../controllers/laboratoryController.js";
 
 const labRouter = express.Router();
 
-// labRouter.post("/login", login);
-// l.get("/list", getAllDoctors);
-// doctorRouter.get("/get-pieplot",protect , allowedTo("doctor") , sendDoctorPatientStats)
 labRouter.get("/get-lab" , protect() , allowedTo("doctor") , getAllLaboratories);
-// doctorRouter.get("/find-doc-by-id" , protect(patientModel) , findDocById);
+labRouter.get("/get-tests", protect() , allowedTo("laboratory") , getTests);
+labRouter.post("/add-test", protect() , allowedTo("laboratory") , addTest);
 
-// doctorRouter.get("/find-doc-by-speciality" , protect(patientModel) , findDocBySpeciality);
 
 export default labRouter;
