@@ -88,9 +88,11 @@ const addTest = async (req, res) => {
 
     // Optionally add patientId to test record
     const testEntry = {
-  _id: new mongoose.Types.ObjectId(),
+     _id: new mongoose.Types.ObjectId(),
       patientId,
-      createdAt: Date.now()
+      createdAt: Date.now(),
+      ...req.body
+
     };
 
     lab.tests.push(testEntry);
