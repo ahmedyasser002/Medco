@@ -1,5 +1,6 @@
 import express from "express";
 import { allowedTo, protect } from "../middlewares/auth-middleware.js";
+import { getAllLaboratories } from "../controllers/laboratoryController.js";
 
 const labRouter = express.Router();
 
