@@ -191,4 +191,22 @@ const getPatientList = async (req,res)=>{
         
     }
 }
-export { registerPatient, loginPatient, getProfile, updateProfile , getPatientList }
+
+const getPatientEthereumAddressByNationalId = async (req,res)=>{
+
+  const {nationalID} = req.body;
+
+ try {
+
+        const patient = await patientModel.findOne({nationalID}).select(['ethereumAddress']);
+        res.status(200).json({ success: true, data: patient });
+
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({ success: false, message: error.message });
+        
+    }
+}
+
+
+export { registerPatient, loginPatient, getProfile, updateProfile , getPatientList , getPatientEthereumAddressByNationalId}
