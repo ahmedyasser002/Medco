@@ -116,6 +116,8 @@ const listAppointmentByDoctorId = async (req, res) => {
   }
 };
 
+
+
 export {
   bookAppointment,
   listAppointmentByPatientId,

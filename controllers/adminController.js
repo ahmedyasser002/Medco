@@ -292,6 +292,34 @@ const sendDateForPiePlot = async (req, res) => {
   }
 };
 
+const getAppointmentCount = async (req, res) => {
+  try {
+    const count = await appointmentModel.countDocuments(); // Efficient count
+    res.status(200).json({ success: true, count });
+  } catch (error) {
+    res.status(500).json({ success: false, message: error.message });
+  }
+};
+const getTotalFees = async (req,res) => {
+  try {
+    const result = await appointmentModel.aggregate([
+    {
+      $group: {
+        _id: null,
+        totalFees: { $sum: "$docData.fees" }
+      }
+    }
+  ]);
+
+  res.status(200).json({success:true, data:"$"+result[0]?.totalFees || 0}) ;
+    
+  } catch (error) {
+    
+  }
+  
+};
+
+
 
 export {
   addDoctor,
@@ -300,5 +328,7 @@ export {
   deletePatient,
   getAppointmentList,
   sendDataForBarPlot,
-  sendDateForPiePlot
+  sendDateForPiePlot,
+  getAppointmentCount,
+  getTotalFees
 };

@@ -4,6 +4,8 @@ import {
   addDoctor,
   deleteDoctor,
   deletePatient,
+  getAppointmentCount,
+  getTotalFees,
   getAppointmentList,
   loginAdmin,
   sendDataForBarPlot,
@@ -55,5 +57,19 @@ adminRouter.get(
   protect(),
   allowedTo("admin", "doctor"),
   sendDateForPiePlot
+),
+
+adminRouter.get(
+  "/appointment-count",
+  protect(),
+  allowedTo("admin"),
+  getAppointmentCount
 )
+adminRouter.get(
+  "/appointment-totalfees",
+  protect(),
+  allowedTo("admin"),
+  getTotalFees
+)
+
 export default adminRouter;
