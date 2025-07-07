@@ -46,14 +46,14 @@ adminRouter.get(
 adminRouter.get(
   "/get-barplot",
   protect(),
-  allowedTo("admin"),
+  allowedTo("admin", "doctor"),
   sendDataForBarPlot
 )
 
 adminRouter.get(
   "/get-pieplot",
   protect(),
-  allowedTo("admin"),
+  allowedTo("admin", "doctor"),
   sendDateForPiePlot
 )
 export default adminRouter;

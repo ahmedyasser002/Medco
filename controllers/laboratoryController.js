@@ -130,6 +130,7 @@ const completeTest = async (req, res) => {
 
     // Update the isCompleted field
     test.isCompleted = true;
+    lab.markModified("tests"); // <-- tells Mongoose the array was changed
 
     // Save the updated lab document
     await lab.save();
