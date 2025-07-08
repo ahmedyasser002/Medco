@@ -1,7 +1,6 @@
-import testModel from "../models/test.js"; // adjust path if needed
-import doctorModel from "../models/doctor.js"; // for checking lab
-import patientModel from "../models/patient.js"; // for optional validation
-import mongoose from "mongoose";
+import testModel from "../models/testModel.js"; // adjust path if needed
+import doctorModel from "../models/doctorModel.js"; // for checking lab
+import patientModel from "../models/patientModel.js"; // for optional validation
 
 const addTest = async (req, res) => {
   try {
