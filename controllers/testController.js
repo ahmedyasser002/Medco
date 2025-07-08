@@ -4,9 +4,9 @@ import patientModel from "../models/patientModel.js"; // for optional validation
 
 const addTest = async (req, res) => {
   try {
-    const { patientId, laboratoryId, doctorId, name } = req.body;
+    const { patientId, laboratoryId, doctorId, name ,cost} = req.body;
 
-    if (!laboratoryId || !name || !patientId || !doctorId) {
+    if (!laboratoryId || !name || !patientId || !doctorId || !cost) {
       return res.status(400).json({ success: false, message: "Missing required fields" });
     }
 
@@ -31,6 +31,7 @@ const addTest = async (req, res) => {
     // Create the test record
     const newTest = await testModel.create({
       name,
+      cost,
       patientId,
       doctorId,
       laboratoryId,
@@ -79,7 +80,8 @@ const getTestsByPatientId = async (req, res) => {
   try {
     const tests = await testModel.find({ patientId })
       .populate("doctorId", "name email")
-      .populate("laboratoryId", "name email");
+      .populate("laboratoryId", "name email")
+      .populate("patientId" ,"firstName lastName")
 
     res.status(200).json({ success: true, data: tests });
   } catch (error) {
@@ -95,7 +97,9 @@ const getTestsByDoctorId = async (req, res) => {
   try {
     const tests = await testModel.find({ doctorId })
       .populate("patientId", "name email")
-      .populate("laboratoryId", "name email");
+      .populate("laboratoryId", "name email")
+      .populate("patientId" ,"firstName lastName")
+
 
     res.status(200).json({ success: true, data: tests });
   } catch (error) {
@@ -111,7 +115,9 @@ const getTestsByLaboratoryId = async (req, res) => {
   try {
     const tests = await testModel.find({ laboratoryId })
       .populate("patientId", "name email")
-      .populate("doctorId", "name email");
+      .populate("doctorId", "name email")
+      .populate("patientId" ,"firstName lastName")
+
 
     res.status(200).json({ success: true, data: tests });
   } catch (error) {
