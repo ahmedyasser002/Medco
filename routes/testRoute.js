@@ -15,7 +15,7 @@ const testRouter = express.Router();
 testRouter.post("/add", protect(), allowedTo("doctor",), addTest);
 
 // Mark test as complete
-testRouter.post("/complete", protect(), allowedTo("laboratory"), completeTest);
+testRouter.patch("/complete", protect(), allowedTo("laboratory"), completeTest);
 
 // Get tests by patient ID
 testRouter.get("/patient/:patientId", protect(), allowedTo("doctor", "admin"), getTestsByPatientId);

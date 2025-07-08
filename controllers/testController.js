@@ -27,6 +27,7 @@ const addTest = async (req, res) => {
     if (!patient) {
       return res.status(404).json({ success: false, message: "Patient not found" });
     }
+    
 
     // Create the test record
     const newTest = await testModel.create({
