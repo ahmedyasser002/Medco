@@ -34,7 +34,7 @@ patientRouter.get("/get-profile", protect(patientModel), getProfile);
 
 patientRouter.get("/list", protect(), allowedTo("admin"), getPatientList);
 
-patientRouter.get("/get-ethereum-address", protect(), allowedTo("doctor"), getPatientEthereumAddressByNationalId);
+patientRouter.post("/get-ethereum-address", protect(), allowedTo("doctor"), getPatientEthereumAddressByNationalId);
 
 
 patientRouter.patch('/update-profile',protect(patientModel), upload.single('image'), updateProfile);
