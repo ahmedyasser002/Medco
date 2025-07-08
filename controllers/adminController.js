@@ -311,7 +311,7 @@ const getTotalFees = async (req,res) => {
     }
   ]);
 
-  res.status(200).json({success:true, data:"$"+result[0]?.totalFees || 0}) ;
+  res.status(200).json({success:true, data:result[0]?.totalFees || 0}) ;
     
   } catch (error) {
     

@@ -206,7 +206,18 @@ const getPatientEthereumAddressByNationalId = async (req,res)=>{
         res.status(500).json({ success: false, message: error.message });
         
     }
-}
+};
+
+const getPatientCount = async (req, res) => {
+  try {
+    const totalCount = await patientModel.countDocuments();
+    res.status(200).json({ success: true, data: totalCount });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ success: false, message: error.message });
+  }
+};
 
 
-export { registerPatient, loginPatient, getProfile, updateProfile , getPatientList , getPatientEthereumAddressByNationalId}
+
+export { registerPatient, loginPatient, getProfile, updateProfile , getPatientList , getPatientEthereumAddressByNationalId , getPatientCount}

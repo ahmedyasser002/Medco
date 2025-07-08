@@ -83,6 +83,7 @@ const getTestsByPatientId = async (req, res) => {
       .populate("doctorId", "name email")
       .populate("laboratoryId", "name email")
       .populate("patientId" ,"firstName lastName")
+      .sort('-date')
 
     res.status(200).json({ success: true, data: tests });
   } catch (error) {
@@ -100,6 +101,8 @@ const getTestsByDoctorId = async (req, res) => {
       .populate("patientId", "name email")
       .populate("laboratoryId", "name email")
       .populate("patientId" ,"firstName lastName")
+    .sort('-date')
+
 
 
     res.status(200).json({ success: true, data: tests });
@@ -118,6 +121,8 @@ const getTestsByLaboratoryId = async (req, res) => {
       .populate("patientId", "name email")
       .populate("doctorId", "name email")
       .populate("patientId" ,"firstName lastName")
+      .sort('-date')
+
 
 
     res.status(200).json({ success: true, data: tests });

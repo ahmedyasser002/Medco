@@ -16,6 +16,7 @@ import {
 import authAdmin from "../middlewares/authAdmin.js";
 import { allowedTo, protect } from "../middlewares/auth-middleware.js";
 import upload from "../middlewares/uploadMiddleware.js";
+import { getPatientCount } from "../controllers/patientController.js";
 
 const adminRouter = express.Router();
 
@@ -71,5 +72,13 @@ adminRouter.get(
   allowedTo("admin"),
   getTotalFees
 )
+
+adminRouter.get(
+  "patients-count",
+  protect(),
+  allowedTo("admin"),
+  getPatientCount
+
+);
 
 export default adminRouter;
