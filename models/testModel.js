@@ -21,12 +21,20 @@ const testSchema = new mongoose.Schema(
       ref: "doctor",
       required: true,
     },
+    cost : {
+    type: Number,
+    required: true,
+    },
     isCompleted: {
       type: Boolean,
       default: false,
     },
     testResult: {
       type: String,
+    },
+    date: {
+      type: Date,
+      default: Date.now, 
     },
   },
   {
