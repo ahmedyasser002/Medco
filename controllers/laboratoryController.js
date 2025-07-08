@@ -106,7 +106,7 @@ const addTest = async (req, res) => {
 };
 
 const completeTest = async (req, res) => {
-  const { testId } = req.body;
+  const { testId , testResult } = req.body;
 
   try {
     // Find the lab that contains the test
@@ -130,6 +130,7 @@ const completeTest = async (req, res) => {
 
     // Update the isCompleted field
     test.isCompleted = true;
+    test.testResult = testResult;
     lab.markModified("tests"); // <-- tells Mongoose the array was changed
 
     // Save the updated lab document
