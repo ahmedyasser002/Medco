@@ -72,7 +72,6 @@ const completeTest = async (req, res) => {
 };
 
 
-import testModel from "../models/test.js";
 
 const getTestsByPatientId = async (req, res) => {
   const { patientId } = req.params;
