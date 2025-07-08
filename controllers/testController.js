@@ -44,7 +44,6 @@ const addTest = async (req, res) => {
 };
 
 
-import testModel from "../models/test.js"; // adjust path if needed
 
 const completeTest = async (req, res) => {
   const { testId, testResult } = req.body;
