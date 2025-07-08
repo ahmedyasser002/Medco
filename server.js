@@ -11,6 +11,7 @@ import doctorRouter from "./routes/doctorRoute.js";
 import patientRouter from "./routes/patientRoute.js";
 import appointmentRouter from "./routes/appointmenrRoute.js";
 import labRouter from "./routes/labRoute.js";
+import testRouter from "./routes/testRoute.js";
 
 // app config
 const app = express();
@@ -28,7 +29,9 @@ app.use("/api/admin", adminRouter);
 app.use("/api/doctor", doctorRouter);
 app.use("/api/patient", patientRouter);
 app.use("/api/appointments", appointmentRouter);
-app.use("/api/laboratory" , labRouter)
+app.use("/api/laboratory" , labRouter);
+app.use("/api/tests" , testRouter);
+
 
 app.get("/", (req, res) => {
   res.send("API Working");

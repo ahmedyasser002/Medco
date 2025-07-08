@@ -74,7 +74,7 @@ const doctorSchema = new mongoose.Schema(
     },
     status: {
       type: String,
-      default: "UnVerified",
+      default: "Pending",
     },
     tests:{
       required:false,
