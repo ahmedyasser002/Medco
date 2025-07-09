@@ -74,7 +74,7 @@ adminRouter.get(
 )
 
 adminRouter.get(
-  "patients-count",
+  "/patients-count",
   protect(),
   allowedTo("admin"),
   getPatientCount
