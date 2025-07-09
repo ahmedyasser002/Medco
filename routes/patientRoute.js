@@ -5,7 +5,8 @@ import {
   getProfile,
   updateProfile,
   getPatientList,
-  getPatientEthereumAddressByNationalId
+  getPatientEthereumAddressByNationalId,
+  getMyTests
   // bookAppointment,
   // listAppointmentByPatientId,
   // cancelAppointment,
@@ -38,6 +39,13 @@ patientRouter.post("/get-ethereum-address", protect(), allowedTo("doctor"), getP
 
 
 patientRouter.patch('/update-profile',protect(patientModel), upload.single('image'), updateProfile);
+
+patientRouter.get(
+  "/tests",
+  protect(patientModel),
+  getMyTests
+
+)
 
 
 // patientRouter.post("/book-appointment", protect, bookAppointment);

@@ -6,11 +6,12 @@ import { v2 as cloudinary } from "cloudinary";
 import doctorModel from "../models/doctorModel.js";
 import appointmentModel from "../models/appointmentModel.js";
 import uploadAndResizeImage from "../utils/uploadAndResizeImage.js";
+import testModel from "../models/testModel.js";
 
 // API to Register User
 const registerPatient = async (req, res) => {
   try {
-    const { firstName, lastName, nationalID , ethereumAddress ,email, password , gender } = req.body;
+    const { firstName, lastName, nationalID, ethereumAddress, email, password, gender } = req.body;
     if (!firstName || !lastName || !nationalID || !password || !ethereumAddress || !email || !gender) {
       return res
         .status(400)
@@ -91,7 +92,7 @@ const loginPatient = async (req, res) => {
     const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET);
     res
       .status(200)
-      .json({ success: true, message: "Logged in successfully", token , user });
+      .json({ success: true, message: "Logged in successfully", token, user });
   } catch (error) {
     res.status(500).json({ success: false, message: error.message });
   }
@@ -113,9 +114,9 @@ const getProfile = async (req, res) => {
 const updateProfile = async (req, res) => {
   try {
     // const userId = req.user._id
-        const userId = req.user._id;  // get id from auth middleware
+    const userId = req.user._id;  // get id from auth middleware
 
-    const { firstName, lastName ,phone, address, dob, gender } = req.body;
+    const { firstName, lastName, phone, address, dob, gender } = req.body;
     const imageFile = req.file;
 
     // Ensure userId is provided
@@ -146,12 +147,12 @@ const updateProfile = async (req, res) => {
     }
     let imageUrl = null;
 
-   // Upload image to cloudinary
-   if (imageFile) {
-    imageUrl = await uploadAndResizeImage(imageFile, "Patients");
-    updateData.image = imageUrl;
-  }
-  
+    // Upload image to cloudinary
+    if (imageFile) {
+      imageUrl = await uploadAndResizeImage(imageFile, "Patients");
+      updateData.image = imageUrl;
+    }
+
     const updatedUser = await patientModel.findByIdAndUpdate(userId, updateData, {
       new: true,
     });
@@ -178,34 +179,34 @@ const updateProfile = async (req, res) => {
   }
 };
 
-const getPatientList = async (req,res)=>{
+const getPatientList = async (req, res) => {
 
- try {
+  try {
 
-        const patients = await patientModel.find({}).select(['-password']);
-        res.status(200).json({ success: true, data: patients });
+    const patients = await patientModel.find({}).select(['-password']);
+    res.status(200).json({ success: true, data: patients });
 
-    } catch (error) {
-        console.log(error);
-        res.status(500).json({ success: false, message: error.message });
-        
-    }
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ success: false, message: error.message });
+
+  }
 }
 
-const getPatientEthereumAddressByNationalId = async (req,res)=>{
+const getPatientEthereumAddressByNationalId = async (req, res) => {
 
-  const {nationalID} = req.body;
+  const { nationalID } = req.body;
 
- try {
+  try {
 
-        const patient = await patientModel.findOne({nationalID}).select(['ethereumAddress']);
-        res.status(200).json({ success: true, data: patient });
+    const patient = await patientModel.findOne({ nationalID }).select(['ethereumAddress']);
+    res.status(200).json({ success: true, data: patient });
 
-    } catch (error) {
-        console.log(error);
-        res.status(500).json({ success: false, message: error.message });
-        
-    }
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ success: false, message: error.message });
+
+  }
 };
 
 const getPatientCount = async (req, res) => {
@@ -218,6 +219,31 @@ const getPatientCount = async (req, res) => {
   }
 };
 
+const getMyTests = async (req, res) => {
+  try {
+    const id = req.user._id;
+    // Find tests where patientId matches the provided id
+    const tests = await testModel.find({ patientId: id });
 
+    if (!tests || tests.length === 0) {
+      return res.status(404).json({
+        success: false,
+        message: "No tests found for this patient.",
+      });
+    }
 
-export { registerPatient, loginPatient, getProfile, updateProfile , getPatientList , getPatientEthereumAddressByNationalId , getPatientCount}
+    res.status(200).json({
+      success: true,
+      data: tests,
+    });
+
+  } catch (error) {
+    console.error("Error fetching patient tests:", error);
+    res.status(500).json({
+      success: false,
+      message: "Internal Server Error",
+    });
+  }
+};
+
+export { registerPatient, loginPatient, getProfile, updateProfile, getPatientList, getPatientEthereumAddressByNationalId, getPatientCount, getMyTests }
