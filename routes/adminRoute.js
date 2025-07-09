@@ -10,6 +10,7 @@ import {
   loginAdmin,
   sendDataForBarPlot,
   sendDateForPiePlot,
+  getLatestAppointments,
 } from "../controllers/adminController.js";
 
 
@@ -80,5 +81,13 @@ adminRouter.get(
   getPatientCount
 
 );
+
+adminRouter.get(
+  "/recent-appointments",
+  protect(),
+  allowedTo("admin"),
+  getLatestAppointments
+
+)
 
 export default adminRouter;

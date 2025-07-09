@@ -319,6 +319,32 @@ const getTotalFees = async (req,res) => {
   
 };
 
+const getLatestAppointments = async (req, res) => {
+  try {
+    const appointments = await appointmentModel
+      .find({}, {
+        'docData.name': 1,
+        'docData.fees': 1,
+        slotDate: 1,
+        slotTime: 1,
+      })
+      .sort({ date: -1 }) // latest first
+      .limit(15);
+
+    res.status(200).json({
+      success: true,
+      data: appointments,
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
+
+
 
 
 export {
@@ -330,5 +356,6 @@ export {
   sendDataForBarPlot,
   sendDateForPiePlot,
   getAppointmentCount,
-  getTotalFees
+  getTotalFees,
+  getLatestAppointments
 };
